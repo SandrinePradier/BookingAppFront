@@ -32,9 +32,10 @@
 		margin-top:5px;
 		}
 
-		&__calendar__navicon {
-		color:#212121;
-		}
+		// &__calendar__navicon:hover {
+		// color:#673AB7;
+		// background-color: transparent;
+		// }
 
 		&__calendar__headDayUl{
 		width: 100px;
@@ -60,7 +61,84 @@
 		list-style:none;
 		width: 100px;
 		}
+
+		&__calendar__btn{
+		// variant: outline;
+		width: 80%;
+		border-radius: 4px; 
+		height: 30px;
+		font-size: 14px;
+		// background-color: red;
+		// border-color: pink;
+		// color: pink;
+	 	}
+
 	}
+
+	.btn .btn__content .icon{
+		color: #673AB7;
+	}
+
+	// .btn .btn__content .icon:hover{
+	// 	color: #673AB7;
+	// 	background-color: transparent;
+	// 	text-decoration: none;
+	// }
+	
+	// .btn .btn__content .icon:focus{
+	// 	color: #673AB7;
+	// 	background-color: transparent;
+	// 	text-decoration: none;
+	// }
+
+	// .btn .btn__content .icon:active{
+	// 	color: #673AB7;
+	// 	background-color: transparent;
+	// 	text-decoration: none;
+	// }
+
+	// .card__body__calendar__btn .btn .btn--disabled {
+	// 	border: 1px solid grey;
+	//     background: transparent!important;
+	//     background-image: initial;
+	//     background-position-x: initial;
+	//     background-position-y: initial;
+	//     background-size: initial;
+	//     background-repeat-x: initial;
+	//     background-repeat-y: initial;
+	//     background-attachment: initial;
+	//     background-origin: initial;
+	//     background-clip: initial;
+	//     background-color: transparent;
+	// }
+
+// .btn:visited {
+// text-transform: uppercase;
+// text-decoration: none;
+// padding: 1.5rem 4rem;
+// display: inline-block;
+// transition: all 0.2s;
+// position: relative;
+// background-color: $color-two;
+// border-color: $color-primary;
+// color: $color-primary;
+// }
+
+// .btn:hover {
+// 	transform: translateY(-0.3rem);
+// 	box-shadow: 0.5rem 1rem 1rem rgba(0, 0, 0, 0.1);
+// 	background-color: $color-two;
+// 	border-color: $color-primary;
+// 	color: $color-primary;
+// }
+
+// .btn:active {
+// 	transform: translateY(-0.1rem);
+// 	box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.2);
+// 	background-color: $color-two;
+// 	border-color: $color-primary;
+// 	color: $color-primary;
+// }
 
 
 	

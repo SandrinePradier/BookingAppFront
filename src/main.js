@@ -17,13 +17,13 @@ import './scss/main.scss'
 
 Vue.use(Vuetify, {
   theme: {
-  primary: "#673AB7",
-  secondary: "#EDE7F6",
-  accent: "#673AB7",
-  error: "#FF3D00",
-  warning: "#FFC400",
-  info: "#7E57C2",
-  success: "#4caf50"
+    "primary": "#673ab7",
+    "secondary": "white",
+    "accent": "#82B1FF",
+    "error": "#FF5252",
+    "info": "#2196F3",
+    "success": "#4CAF50",
+    "warning": "#FFC107"
   }
 })
 

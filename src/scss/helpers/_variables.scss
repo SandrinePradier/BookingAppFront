@@ -1,11 +1,14 @@
 //colors
-$color_primary: #212121;
-$color_secondary: #673AB7;
+$color_fontbase: #212121; //darkgrey
+// $color_secondary: #673AB7;
 
 $font-family_base: 'Rubik', sans-serif;
 $font-size_base: 14px;
 
-
-// font-family: 'Roboto', sans-serif;
- /* font-family: 'Rubik', sans-serif;*/
- /*font-family: 'Montserrat', sans-serif;*/
+$color_primary: #673AB7;
+$color_secondary: #EDE7F6;
+$color_accent: #673AB7;
+$color_error: #FF3D00;
+$color_warning: #FFC400;
+$color_info: #7E57C2;
+$color_success: #4caf50;

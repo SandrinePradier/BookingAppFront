@@ -1,7 +1,7 @@
 <template>
 	<v-content>
 		<v-card>
-			<v-toolbar card class="card__head">
+			<v-toolbar dark card color="primary" class="card__head">
 				<v-toolbar-title class="card__title">Sélectionnez votre RDV</v-toolbar-title>
 			</v-toolbar card>
 			<v-card-text class="card__body">
@@ -25,7 +25,7 @@
 						<!-- affichage des boutons heures -->
 						<tr class="card__body__calendar__bodyDay" v-for="(day,index) in dayRangeToDisplay" :key="index">
 							<ul class="card__body__calendar__bodyUl"v-for="(hour, index) in hours" :key="index">
-								<li class="card__body__calendar__bodyLi"><v-btn v-bind:disabled="DisableButton(getSlotsFromStore, hour, day)" v-on:click="selectTime(hour,day)" :key="index">{{hour}}</v-btn></li>
+								<li class="card__body__calendar__bodyLi"><v-btn outline color="primary" v-bind:disabled="DisableButton(getSlotsFromStore, hour, day)" class="card__body__calendar__btn" v-on:click="selectTime(hour,day)" :key="index">{{hour}}</v-btn></li>
 							</ul>
 						</tr>
 					</tbody>

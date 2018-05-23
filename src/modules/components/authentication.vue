@@ -1,7 +1,7 @@
 <template>
 	<v-container fluid>
 		<v-card>
-			<v-toolbar card class="card__head">
+			<v-toolbar dark color="primary" card class="card__head">
 				<v-toolbar-title class="card__title">
 					Confirmez votre RDV
 				</v-toolbar-title>
@@ -15,7 +15,7 @@
 				</v-form>
 			</v-card-text>
 			<v-card-actions>
-				<v-btn secondary v-on:click="bookApt(name,email)">Réservez</v-btn>
+				<v-btn outline color="primary" v-on:click="bookApt(name,email)">Réservez</v-btn>
 			</v-card-actions>
 		</v-card>
 	</v-container>
@@ -63,7 +63,8 @@ export default {
           this.$swal({
             type:'success',
             title:'votre RDV',
-            text:this.swalMessage
+            text:this.swalMessage,
+            width: 300
           })
         })
       .catch(
@@ -73,7 +74,8 @@ export default {
           this.$swal({
             type:'error',
             title:'votre RDV',
-            text:this.swalMessage.data.message
+            text:this.swalMessage.data.message,
+            width: 300
           })
         });
   	}
