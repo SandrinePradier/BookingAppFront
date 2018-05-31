@@ -13,12 +13,12 @@ Vue.use(VueSweetalert2)
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
-import './scss/main.scss'
+// import './scss/main.scss'
 
 Vue.use(Vuetify, {
   theme: {
     "primary": "#673ab7",
-    "secondary": "white",
+    "secondary": "#f8f8ff",
     "accent": "#82B1FF",
     "error": "#FF5252",
     "info": "#2196F3",

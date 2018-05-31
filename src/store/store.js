@@ -5,10 +5,13 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
 	state:{
-		aptTime:'',
-		aptDuration:60,
-		aptName:'',
-		aptEmail:'',
+		apt:{
+			aptTime:'',
+			aptDuration:60,
+			aptName:'',
+			aptEmail:'',
+			aptSlot:'',
+		},
 		slots: []
 	},
 	mutations:{
@@ -16,11 +19,14 @@ export const store = new Vuex.Store({
 			state.slots = slots;
 		},
 		getAptTime(state,apt){
-			state.aptTime = apt;
+			state.apt.aptTime = apt;
 		},
 		getAptContact(state,contact){
-			state.aptName = contact.name;
-			state.aptEmail = contact.email
+			state.apt.aptName = contact.name;
+			state.apt.aptEmail = contact.email;
+		},
+		getAptSlot(state,slot){
+			state.apt.aptSlot = slot;
 		}
 	}
 })

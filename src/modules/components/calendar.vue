@@ -24,8 +24,11 @@
 					<tbody class="card__body__calendar__body">
 						<!-- affichage des boutons heures -->
 						<tr class="card__body__calendar__bodyDay" v-for="(day,index) in dayRangeToDisplay" :key="index">
-							<ul class="card__body__calendar__bodyUl"v-for="(hour, index) in hours" :key="index">
-								<li class="card__body__calendar__bodyLi"><v-btn outline color="primary" v-bind:disabled="DisableButton(getSlotsFromStore, hour, day)" class="card__body__calendar__btn" v-on:click="selectTime(hour,day)" :key="index">{{hour}}</v-btn></li>
+							<ul class="card__body__calendar__bodyUl" v-for="(button, index) in btnIdToDisplay" v-if="buttonIsInDay(day,button)" :key="index">
+								<li class="card__body__calendar__bodyLi">
+									<v-btn outline color="primary" class="card__body__calendar__btn" v-on:click="selectTime(button,getSlotsFromStore)" :key="index" v-bind:disabled="button.disabled" v-bind:button="button">{{button.id | displayButtonId}}
+									</v-btn>
+								</li>
 							</ul>
 						</tr>
 					</tbody>
@@ -39,6 +42,7 @@
 <script>
 
 import { store } from './../../store/store';
+import http from './../../helpers/http';
 import cal from './../../helpers/calendar';
 import moment from 'moment';
 import 'moment/locale/fr';
@@ -49,12 +53,17 @@ export default {
 	props:['visibleProp'],
 	data () {
 		return {
-			hours:['10:00','11:00', '12:00', '13:00'],
+			hours:['10:00','11:00', '12:00', '13:00', '14:00', '15:00'],
 			hour:'',
 			day:'',
 			beginDisplay:0,
 			aptMoment:'',
+			aptSlot:'',
 			displayAuth:this.visibleProp,
+			button:'',
+			buttonList:[],
+			filteredButtonList: [],
+			disabled: ''
 		}
 	},
 	computed:{
@@ -74,7 +83,22 @@ export default {
 		},
 		getSlotsFromStore(){
       		return this.$store.state.slots;
-    	}
+    	},
+    	btnIdToDisplay(){
+      		return this.filterButtonIdToDisplay(this.dayRangeToDisplay, this.buttonList);
+    },
+	},
+	created(){
+		http.get('/')
+    .then( 
+      res => {
+        console.log('res from get calendar:', res);
+        this.$store.commit('getSlots',res.data.content);
+        this.createButtonId(this.getDaysRange);
+	 	this.updateButtonId(this.getSlotsFromStore, this.buttonList);
+      })
+    .catch( 
+      err => {console.log('err:', err)});
 	},
 	methods:{
 		getCurrentDayPlus2month(now){
@@ -85,52 +109,127 @@ export default {
 			return arr;
 		},
 		getNextDays(){
-			if (this.beginDisplay>=0){ this.beginDisplay += 3}
+			if (this.beginDisplay>=0){ 
+				this.beginDisplay += 3
+				this.filteredButtonList = [];
+			}
 		},
 		getPreviousDays(){
-			if (this.beginDisplay>=3){this.beginDisplay -= 3}
+			if (this.beginDisplay>=3){
+				this.beginDisplay -= 3
+				this.filteredButtonList = [];
+			}
+			
 		},
-		selectTime(hour,day){
+		buttonIsInDay: function(day,btn){
+	      // this is a conditional function, called in V-for to display under the day only the button with ID matching the day
+	      let a = moment(day).format('YYYY-MM-DD').toString();
+	      let b = btn.id.slice(0,10);
+	      if(a == b) {
+	        return true;
+	      }
+	    },
+		selectTime(button,slots){
+			//display the form to enter personnal details
 			this.displayAuth = false;
-			let aptTime ={};
-			aptTime.day = day;
-			aptTime.hour = hour;
-			this.aptMoment = moment(aptTime.day).startOf('day').add(cal.convertTimeInMinutes(aptTime.hour), 'minutes');
-			//pass to store the details of the appointment
-			console.log('aptMoment:', this.aptMoment);
+			//pass to store the appointment time
+			let aptTime = button.id.slice(0,16).toString();
+			this.aptMoment = moment(aptTime,'YYYY-MM-DD-HH-mm' );
 			this.$store.commit('getAptTime', this.aptMoment);
+			//pass to store the matching slot
+			this.getMatchingSlot(this.getSlotsFromStore);
+			this.$store.commit('getAptSlot', this.aptSlot);
 			//pass to parent component Home the event to change display Auth to visible
-			this.updateDisplayAuth()
+			this.updateDisplayAuth();
+			
+		},
+		getMatchingSlot(slotList){
+			for (let i=0; i<slotList.length; i++){
+				let sl = moment(slotList[i].start)
+				if (moment(sl).isSame(this.aptMoment)){
+					console.log('matching slot:', slotList[i]);
+					this.aptSlot = slotList[i];
+				}
+			}
+			return this.aptSlot
 		},
 		updateDisplayAuth(){
 			this.displayAuth = !this.displayAuth;
-			console.log('this.displayAuth: ', this.displayAuth);
 			this.$emit('displayAuth', this.displayAuth);
 		},
-		DisableButton(slots, hour, day){
-			//this function is called in the v-for, and evaluate for each day and each hour if there is a slot matching. slot matching means there is an appointment at that time. if so the button will be disabled because this function return true
-			console.log('setClass is called');
-			for (let i=0; i<slots.length; i++){
-				console.log('slot[i]:', slots[i]);
-				console.log('slot[i].start: ', slots[i].start);
-				if (moment(slots[i].start).format('YYYY-MM-DD') == moment(day).format('YYYY-MM-DD') && moment(slots[i].start).format('HH:mm') == hour){
-						console.log('day matching: ', day);
-						console.log('hour matching: ', hour);
-						return true;
-					} 
-			}
-		}
+		createButtonId(timeRange){
+	      this.buttonList = [];
+	      //based on a timeRange of days, and based on the hours to display in agenda
+	      //this function create buttons with Id representatives of the date, hour.
+	      //by default, they also represent status N( Non available)
+	      let reg = /:/;
+	      for (let i=0; i<timeRange.length; i++){
+	        for(let j=0; j<this.hours.length; j++){
+	          let id;
+	          id = moment(timeRange[i]).format('YYYY-MM-DD').toString()+ '-' + this.hours[j]+ '-' +'N';
+	          id = id.replace(reg, '-');
+	          let button = {
+	            id: id,
+	            class:'N',
+	            disabled: true
+	          }
+	          this.buttonList.push(button);
+	        }
+	      }
+	      return this.buttonList;
+	    },
+	    updateButtonId(slots, btnList){
+	      //this function will update ButtonID based on slots status, and modify the buttonsID accordingly
+	      for (let i=0; i<slots.length; i++){
+	        for (let j=0; j<btnList.length; j++){
+	          let sl = moment(slots[i].start).format('YYYY-MM-DD-HH-mm').toString();
+	          let id = btnList[j].id.slice(0,16);
+	          if (sl == id) {
+	            if(slots[i].status === 'available'){
+	              btnList[j].id = btnList[j].id.slice(0,16)+'-'+'A';
+	              btnList[j].class = 'A';
+	              btnList[j].disabled = false;
+	            }
+	            if(slots[i].status === 'booked'){
+	              btnList[j].id = btnList[j].id.slice(0,16)+'-'+'B';
+	              btnList[j].class = 'B';
+	              btnList[j].disabled = true;
+	            }
+	          }
+	        }
+	      }
+	      return this.buttonList;
+	    },
+	    filterButtonIdToDisplay(timeRange, btnList){
+	      for (let i=0; i<timeRange.length; i++){
+	        let trday
+	        trday = moment(timeRange[i]).format('YYYY-MM-DD').toString();
+	        for (let j=0; j<btnList.length; j++){
+	          let btnid = btnList[j].id.slice(0,10);
+	          if (trday == btnid){
+	            this.filteredButtonList.push(btnList[j]);
+	          }
+	        }
+	      }
+	      return this.filteredButtonList;
+	    }
 	},
 	filters:{
-		dateFormatDayName: function(date) {
+		dateFormatDayName(date) {
 			return moment(date).format('dddd');
 		},
-		dateFormatDayNumberAndMonth: function(date) {
+		dateFormatDayNumberAndMonth(date) {
 			return moment(date).format('D MMM');
 		},
-		dateFormatFullDayHour: function(date){
+		dateFormatFullDayHour(date){
 			return moment(date).format('LLLL');
-		}
+		},
+		displayButtonId(id){
+      		id = id.slice(11,16);
+      		let reg = /-/;
+			id = id.replace(reg, ':');
+			return id;
+    	}
 	}
 };
 </script>
@@ -138,5 +237,6 @@ export default {
 
 
 <style scoped>
+
 
 </style>

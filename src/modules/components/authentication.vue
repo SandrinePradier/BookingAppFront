@@ -6,7 +6,7 @@
 					Confirmez votre RDV
 				</v-toolbar-title>
 				<v-spacer></v-spacer>
-				<v-content class="card__timeApt">{{getTimeApt | dateFormatFullDayHour}}</v-content>
+				<v-content class="card__timeApt">{{ getAptDetails.aptTime| dateFormatFullDayHour}}</v-content>
 			</v-toolbar card>
 			<v-card-text>
 				<v-form>
@@ -32,12 +32,9 @@ import 'moment/locale/fr';
 export default {
   name: 'authentication',
   computed:{
-  	getTimeApt(){
-  		return this.$store.state.aptTime;
-  	},
-    getDurationApt(){
-      return this.$store.state.aptDuration;
-    }
+  	getAptDetails(){
+  		return this.$store.state.apt;
+  	}
   },
   data () {
     return {
@@ -51,8 +48,9 @@ export default {
   		let aptDetails = {
   			name:name,
   			mail:email,
-  			time:this.getTimeApt,
-        duration: this.getDurationApt
+  			time:this.getAptDetails.aptTime,
+        duration: this.getAptDetails.aptDuration,
+        slotId: this.getAptDetails.aptSlot._id,
   		};
   		this.$store.commit('getAptContact',aptDetails );
       http.post('/', aptDetails)

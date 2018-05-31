@@ -33,20 +33,8 @@ export default {
    showAuth(updateVisible){
     this.visible = updateVisible;
     console.log('this.visible in home: ', this.visible);
-    // TODO : il faudra renvoyer un update à calender pour que la propriété visible se mette à nouveau à false, de manière à ce que si la personne reclique sur une heure de RDV, le formulaire ne s'enlève pas
     }
-  },
-  created(){
-    http.get('/')
-    .then( 
-      res => {
-        console.log('res from get:', res);
-        this.$store.commit('getSlots',res.data.content);
-      })
-    .catch( 
-      err => {console.log('err:', err)})
   }
-  
 };
 </script>
 
