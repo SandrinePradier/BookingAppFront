@@ -1,41 +1,47 @@
 <template>
-	<v-content>
-		<v-card>
-			<v-toolbar dark card color="primary" class="card__head">
-				<v-toolbar-title class="card__title">Sélectionnez votre RDV</v-toolbar-title>
-			</v-toolbar card>
-			<v-card-text class="card__body">
-				<table class="card__body__calendar">
-					<thead class="card__body__calendar__head">
-						<v-btn icon class="card__body__calendar__navicon"v-on:click="getPreviousDays()">
-							<v-icon>navigate_before</v-icon>
-						</v-btn>
-						<!-- affichage de la date -->
-						<tr class="card__body__calendar__headDays" v-for="(day,index) in dayRangeToDisplay">
-							<ul class="card__body__calendar__headDayUl">
-								<li class="card__body__calendar__headDayLi">{{day | dateFormatDayName}}</li>
-								<li class="card__body__calendar__headDayLi">{{day | dateFormatDayNumberAndMonth}}</li>
-							</ul>
-						</tr>
-						<v-btn icon class="card__body__calendar__navicon" v-on:click="getNextDays()">
-							<v-icon>navigate_next</v-icon>
-						</v-btn>
-					</thead>
-					<tbody class="card__body__calendar__body">
-						<!-- affichage des boutons heures -->
-						<tr class="card__body__calendar__bodyDay" v-for="(day,index) in dayRangeToDisplay" :key="index">
-							<ul class="card__body__calendar__bodyUl" v-for="(button, index) in btnIdToDisplay" v-if="buttonIsInDay(day,button)" :key="index">
-								<li class="card__body__calendar__bodyLi">
-									<v-btn outline color="primary" class="card__body__calendar__btn" v-on:click="selectTime(button,getSlotsFromStore)" :key="index" v-bind:disabled="button.disabled" v-bind:button="button">{{button.id | displayButtonId}}
-									</v-btn>
-								</li>
-							</ul>
-						</tr>
-					</tbody>
-				</table>
-			</v-card-text>
-		</v-card>
-	</v-content>
+					<v-container fluid grid-list class="card__body">
+					<v-layout fluid row wrap center class="card__body__calendar">
+						
+						<!-- //1 -->
+						<v-flex class="a">
+							<v-btn icon class="card__body__calendar__navicon"v-on:click="getPreviousDays()">
+								<v-icon>navigate_before</v-icon>
+							</v-btn>
+						</v-flex>
+
+						<!-- //2 -->
+						<v-flex class="b">
+							<v-container fluid grid-list>
+								<v-layout row justify-center wrap>
+
+									<v-flex xs12 sm12 md4 lg4 xl4 class="card__body__calendar__Days" v-for="(day,index) in dayRangeToDisplay" :key='index'>
+										<li class="card__body__calendar__headDayLi">{{day | dateFormatDayName}}</li>
+										<li class="card__body__calendar__headDayLi">{{day | dateFormatDayNumberAndMonth}}</li>
+										<ul class="card__body__calendar__bodyUl" v-for="(button, index) in btnIdToDisplay" v-if="buttonIsInDay(day,button)" :key="index">
+											<li class="card__body__calendar__bodyLi">
+												<v-btn small outline color="primary" class="card__body__calendar__btn" v-on:click="selectTime(button,getSlotsFromStore)" :key="index"  v-bind:disabled="button.disabled" v-bind:button="button">{{button.id | displayButtonId}}
+												</v-btn>
+											</li>
+										</ul>
+									</v-flex>
+									</v-layout>
+								</v-container>
+							</v-flex>
+
+						<!-- //3 -->
+						<v-flex class="c">
+							<v-btn icon class="card__body__calendar__navicon" v-on:click="getNextDays()">
+								<v-icon>navigate_next</v-icon>
+							</v-btn>
+						</v-flex>
+
+						<v-layout fluid row wrap justify-center v-if="visible" class="sumup">
+							<h3>Votre sélection:&nbsp</h3>
+							<h3> {{aptMoment | dateFormatFullDayHour}}H</h3>
+						</v-layout>
+
+					</v-layout>
+				</v-container>
 </template>
 
 
@@ -50,7 +56,7 @@ import twix from 'twix';
 
 export default {
 	name: 'calendar',
-	props:['visibleProp'],
+	// props:['visibleProp'],
 	data () {
 		return {
 			hours:['10:00','11:00', '12:00', '13:00', '14:00', '15:00'],
@@ -59,11 +65,12 @@ export default {
 			beginDisplay:0,
 			aptMoment:'',
 			aptSlot:'',
-			displayAuth:this.visibleProp,
+			visible:false,
 			button:'',
 			buttonList:[],
 			filteredButtonList: [],
-			disabled: ''
+			disabled: '',
+			activeColor:''
 		}
 	},
 	computed:{
@@ -83,9 +90,9 @@ export default {
 		},
 		getSlotsFromStore(){
       		return this.$store.state.slots;
-    	},
-    	btnIdToDisplay(){
-      		return this.filterButtonIdToDisplay(this.dayRangeToDisplay, this.buttonList);
+    },
+  	btnIdToDisplay(){
+    		return this.filterButtonIdToDisplay(this.dayRangeToDisplay, this.buttonList);
     },
 	},
 	created(){
@@ -95,7 +102,7 @@ export default {
         console.log('res from get calendar:', res);
         this.$store.commit('getSlots',res.data.content);
         this.createButtonId(this.getDaysRange);
-	 	this.updateButtonId(this.getSlotsFromStore, this.buttonList);
+	 			this.updateButtonId(this.getSlotsFromStore, this.buttonList);
       })
     .catch( 
       err => {console.log('err:', err)});
@@ -119,7 +126,6 @@ export default {
 				this.beginDisplay -= 3
 				this.filteredButtonList = [];
 			}
-			
 		},
 		buttonIsInDay: function(day,btn){
 	      // this is a conditional function, called in V-for to display under the day only the button with ID matching the day
@@ -128,34 +134,12 @@ export default {
 	      if(a == b) {
 	        return true;
 	      }
-	    },
-		selectTime(button,slots){
-			//display the form to enter personnal details
-			this.displayAuth = false;
-			//pass to store the appointment time
-			let aptTime = button.id.slice(0,16).toString();
-			this.aptMoment = moment(aptTime,'YYYY-MM-DD-HH-mm' );
-			this.$store.commit('getAptTime', this.aptMoment);
-			//pass to store the matching slot
-			this.getMatchingSlot(this.getSlotsFromStore);
-			this.$store.commit('getAptSlot', this.aptSlot);
-			//pass to parent component Home the event to change display Auth to visible
-			this.updateDisplayAuth();
-			
-		},
-		getMatchingSlot(slotList){
-			for (let i=0; i<slotList.length; i++){
-				let sl = moment(slotList[i].start)
-				if (moment(sl).isSame(this.aptMoment)){
-					console.log('matching slot:', slotList[i]);
-					this.aptSlot = slotList[i];
-				}
+	  },
+		updateVisible(){
+			if (this.visible == false) {
+				this.visible = !this.visible;
 			}
-			return this.aptSlot
-		},
-		updateDisplayAuth(){
-			this.displayAuth = !this.displayAuth;
-			this.$emit('displayAuth', this.displayAuth);
+			// this.$emit('displayAuth', this.displayAuth);
 		},
 		createButtonId(timeRange){
 	      this.buttonList = [];
@@ -212,7 +196,24 @@ export default {
 	        }
 	      }
 	      return this.filteredButtonList;
-	    }
+	    },
+	    selectTime(button,slots){
+			this.updateVisible();
+			this.aptMoment = moment(button.id.slice(0,16).toString(),'YYYY-MM-DD-HH-mm' );
+			this.$store.commit('getAptTime', this.aptMoment);
+			//pass to store the matching slot
+			this.getMatchingSlot(this.getSlotsFromStore);
+			this.$store.commit('getAptSlot', this.aptSlot);
+			},
+			getMatchingSlot(slotList){
+			for (let i=0; i<slotList.length; i++){
+				let sl = moment(slotList[i].start)
+				if (moment(sl).isSame(this.aptMoment)){
+					this.aptSlot = slotList[i];
+				}
+			}
+			return this.aptSlot
+			}
 	},
 	filters:{
 		dateFormatDayName(date) {
@@ -225,11 +226,11 @@ export default {
 			return moment(date).format('LLLL');
 		},
 		displayButtonId(id){
-      		id = id.slice(11,16);
-      		let reg = /-/;
+  		id = id.slice(11,16);
+  		let reg = /-/;
 			id = id.replace(reg, ':');
 			return id;
-    	}
+    }
 	}
 };
 </script>

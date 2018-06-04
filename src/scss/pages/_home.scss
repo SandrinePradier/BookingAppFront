@@ -1,16 +1,18 @@
 .home{
-  width: 100%;
-  display: flex;
+ background-image: linear-gradient(to top, #5f72bd 0%, #9b23ea 100%);
+  height: 100%;
+  color:white;
 }
 
-.calendar{
-  float:left; 
-  width: 50%;
-  height: 400px;
-}
 
-.authentication{
-  float: right;
-  width: 50%;
-  height: 400px;
-}
+// .calendar{
+//   float:left; 
+//   // width: 50%;
+//   height: 400px;
+// }
+
+// .authentication{
+//   float: right;
+//   // width: 50%;
+//   height: 400px;
+// }

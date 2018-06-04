@@ -11,8 +11,14 @@ export const store = new Vuex.Store({
 			aptName:'',
 			aptEmail:'',
 			aptSlot:'',
+			confirmation:''
 		},
 		slots: []
+	},
+	getters:{
+		shareApt(state){
+			return state.apt;
+		}
 	},
 	mutations:{
 		getSlots(state,slots){
@@ -21,12 +27,17 @@ export const store = new Vuex.Store({
 		getAptTime(state,apt){
 			state.apt.aptTime = apt;
 		},
-		getAptContact(state,contact){
-			state.apt.aptName = contact.name;
-			state.apt.aptEmail = contact.email;
+		getAptName(state,contact){
+			state.apt.aptName = contact;
+		},
+		getAptEmail(state,contact){
+			state.apt.aptEmail = contact;
 		},
 		getAptSlot(state,slot){
 			state.apt.aptSlot = slot;
+		},
+		getConfirmation(state, message){
+			state.apt.confirmation = message;
 		}
 	}
 })

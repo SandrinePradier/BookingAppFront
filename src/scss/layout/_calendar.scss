@@ -1,145 +1,115 @@
+h3{
+	// color: #606060;
+	font-size: 16px;
+}
+
+.sumup {
+	font-size: 16px;
+}
+
+.a {
+	// height: 400px;
+	// background-color: blue;
+	width:8%;
+	margin: 0px;
+	padding-top:2%;
+}
 
 
-	.card__head{
-		padding: 0;
-	}
+.b {
+	// height: 400px;
+	// background-color: yellow;
+	margin: 0px;
+	padding: 0px;
+	width:84%;
+}
 
-	.card__title{
-		padding: 0;
-		margin: auto;
-		/*font-weight: bold;*/
-	}
+.c {
+	// height: 400px;
+	// background-color: grey;
+	width:8%;
+	margin: 0px;
+	padding-top:2%;
+}
 
-	.card__body{
-		&__calendar{
-		width:100%;
-		margin-top: 0;
-		}
+.card__head{
+	padding: 0;
+}
 
-		&__calendar__head{
-		display: flex;
-		flex-direction:row;
-		width: 70%;
-		margin-top: 0;
-		justify-content: center;
-		border-bottom: 2px solid #673AB7;
-		margin: auto;
-		}
+.card__title{
+	padding: 0;
+	margin: auto;
+	/*font-weight: bold;*/
+}
 
-		&__calendar__headDays{
+.card__body{
+
+	&__calendar__Days{
 		font-size: 14px;
 		margin-bottom: 5px;
-		margin-top:5px;
-		}
+		// margin-top:5px;
+		// width:5%;
+		// background-color: purple;
+	}
 
-		// &__calendar__navicon:hover {
-		// color:#673AB7;
-		// background-color: transparent;
-		// }
-
-		&__calendar__headDayUl{
-		width: 100px;
-		}
-
-		&__calendar__headDayLi{
+	&__calendar__headDayLi{
 		padding: 0px;
 		margin: 0px;
 		list-style:none;
 		width: 100%;
-		}
+		font-weight: bold;
+		// background-color: red;
+	}
 
-		&__calendar__body{
-		display: flex;
-		flex-direction:row;
-		width: 70%;
-		padding-top: 10px;
-		justify-content: center;
-		margin: auto;
-		}
-
-		&__calendar__bodyLi{
+	&__calendar__bodyLi{
+		padding: 0px;
+		margin: 0px;
 		list-style:none;
-		width: 100px;
-		}
+		width: 100%;
+		// background-color: pink;
+		// justify-content: center;
+	}
 
-		&__calendar__btn{
+	&__calendar__btn{
 		// variant: outline;
-		width: 80%;
+		width: 75%;
 		border-radius: 4px; 
 		height: 30px;
 		font-size: 14px;
-		// background-color: red;
-		// border-color: pink;
-		// color: pink;
-	 	}
-
 	}
 
-	.btn .btn__content .icon{
-		color: #673AB7;
-	}
+&__calendar__btn:selected {
+	transform: translateY(-0.3rem);
+	background-color: #673AB7 !important;
+  color: white !important;
+}
 
-	// .btn .btn__content .icon:hover{
-	// 	color: #673AB7;
-	// 	background-color: transparent;
-	// 	text-decoration: none;
-	// }
+&__calendar__btn:active {
+	transform: translateY(-0.3rem);
+	background-color: #673AB7 !important;
+  color: white !important;
+}
+
+&__calendar__btn:hover {
+	transform: translateY(-0.3rem);
+	background-color: #673AB7 !important;
+  color: white !important;
+}
+
+&__calendar__btn:focus {
+	transform: translateY(-0.3rem);
+	background-color: #673AB7 !important;
+  color: white !important;
+}
+
+}
+
+.btn .btn__content .icon{
+	color: #673AB7;
+	// justify-content: center;
+}
+
 	
-	// .btn .btn__content .icon:focus{
-	// 	color: #673AB7;
-	// 	background-color: transparent;
-	// 	text-decoration: none;
-	// }
-
-	// .btn .btn__content .icon:active{
-	// 	color: #673AB7;
-	// 	background-color: transparent;
-	// 	text-decoration: none;
-	// }
-
-	// .card__body__calendar__btn .btn .btn--disabled {
-	// 	border: 1px solid grey;
-	//     background: transparent!important;
-	//     background-image: initial;
-	//     background-position-x: initial;
-	//     background-position-y: initial;
-	//     background-size: initial;
-	//     background-repeat-x: initial;
-	//     background-repeat-y: initial;
-	//     background-attachment: initial;
-	//     background-origin: initial;
-	//     background-clip: initial;
-	//     background-color: transparent;
-	// }
-
-// .btn:visited {
-// text-transform: uppercase;
-// text-decoration: none;
-// padding: 1.5rem 4rem;
-// display: inline-block;
-// transition: all 0.2s;
-// position: relative;
-// background-color: $color-two;
-// border-color: $color-primary;
-// color: $color-primary;
-// }
-
-// .btn:hover {
-// 	transform: translateY(-0.3rem);
-// 	box-shadow: 0.5rem 1rem 1rem rgba(0, 0, 0, 0.1);
-// 	background-color: $color-two;
-// 	border-color: $color-primary;
-// 	color: $color-primary;
-// }
-
-// .btn:active {
-// 	transform: translateY(-0.1rem);
-// 	box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.2);
-// 	background-color: $color-two;
-// 	border-color: $color-primary;
-// 	color: $color-primary;
-// }
-
 
 	
 
