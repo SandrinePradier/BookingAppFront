@@ -96,7 +96,7 @@ export default {
     },
 	},
 	created(){
-		http.get('/client')
+		http.get('client')
     .then( 
       res => {
         console.log('res from get calendar:', res);
