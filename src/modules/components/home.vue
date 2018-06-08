@@ -72,7 +72,7 @@ export default {
     },
     bookApt(apt){
       console.log('this.shareApt:', this.shareApt);
-      http.post('client', this.shareApt)
+      http.post('/client/', this.shareApt)
       .then(
         res => {
           console.log('res from POST aptDetails: ', res);
